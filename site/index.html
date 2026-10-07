@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>青鳥書庫 — Bookstore Inventory Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{--ink:#1a1d27;--paper:#faf8f4;--accent:#2f6f5f;--line:#e2ddd2;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,"Noto Sans TC",sans-serif;background:var(--paper);color:var(--ink);}
+header{padding:20px 28px;border-bottom:2px solid var(--ink);display:flex;justify-content:space-between;align-items:baseline;}
+header h1{font-size:20px;letter-spacing:.05em;}
+header small{color:#7a756b;}
+nav{display:flex;gap:4px;padding:12px 28px;border-bottom:1px solid var(--line);}
+nav button{border:1px solid var(--line);background:#fff;padding:8px 18px;border-radius:6px 6px 0 0;cursor:pointer;font-size:14px;}
+nav button.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+main{padding:20px 28px;}
+table{width:100%;border-collapse:collapse;background:#fff;}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;font-size:14px;}
+th{background:#f1eee7;}
+.badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:12px;}
+.ok{background:#e2efe9;color:var(--accent);}
+.low{background:#f6e8d8;color:#a06324;}
+.out{background:#f3dede;color:#a03434;}
+.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px;display:inline-block;margin:0 12px 16px 0;}
+.card b{font-size:26px;}
+footer{padding:14px 28px;color:#a5a099;font-size:12px;}
+#cart{position:fixed;right:24px;bottom:24px;background:var(--ink);color:#fff;padding:10px 18px;border-radius:24px;font-size:14px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>青鳥書庫</h1>
+  <small>示範網站 — 供 WebMCP retrofit練習用 · 所有資料為虛構</small>
+</header>
+<nav>
+  <button class="active" data-page="inventory">庫存總覽</button>
+  <button data-page="orders">訂單</button>
+  <button data-page="titles">書目資料</button>
+</nav>
+<main id="app"></main>
+<footer>Bookstore Inventory Demo · vanilla JS SPA · 無後端（模擬資料）· WebMCP enabled</footer>
+<div id="cart">🛒 待出貨：<b id="cart-n">0</b></div>
+
+<script src="./webmcp.js"></script>
+<script>
+// ---------- 模擬資料域（window.DB；webmcp.js 讀這裡） ----------
+window.DB = {
+  titles: {
+    "T-101":{isbn:"9789573318301",title:"夜行的鳥",author:"劉梓潔",price:320,cat:"文學"},
+    "T-102":{isbn:"9786263106172",title:"雜訊",author:"諾爾·蓋格",price:450,cat:"科普"},
+    "T-103":{isbn:"9789570873346",title:"地熱之屋",author:"王聰威",price:380,cat:"文學"},
+    "T-104":{isbn:"9789865256744",title:"演算法圖鑑",author:"石田保輝",price:520,cat:"技術"},
+    "T-105":{isbn:"9789570530690",title:"海風的顏色",author:"川端芽衣",price:299,cat:"兒童"}
+  },
+  stock: {
+    "T-101":{qty:14,shelf:"A-3"},
+    "T-102":{qty:3, shelf:"B-1"},
+    "T-103":{qty:0, shelf:"A-7"},
+    "T-104":{qty:8, shelf:"C-2"},
+    "T-105":{qty:21,shelf:"D-1"}
+  },
+  orders: [
+    {id:"K-201",title:"T-102",qty:2,status:"pending"},
+    {id:"K-202",title:"T-104",qty:1,status:"shipped"}
+  ]
+};
+const LOW_T = 5;
+function shelfStatus(q){ return q<=0?"out":(q<LOW_T?"low":"ok"); }
+
+// ---------- UI ----------
+const pages = {
+  inventory(){
+    let rows = Object.entries(DB.stock).map(([id,s])=>{
+      const t = DB.titles[id];
+      const st = shelfStatus(s.qty);
+      return `<tr><td>${t.title}</td><td>${t.isbn}</td><td>${t.cat}</td><td>${s.shelf}</td>
+      <td><b>${s.qty}</b></td><td><span class="badge ${st}">${st==='ok'?'充足':st==='low'?'偏低':'缺書'}</span></td></tr>`;
+    }).join("");
+    return `<h2 style="margin-bottom:12px">庫存總覽</h2>
+    <div><span class="card">書目 <b>${Object.keys(DB.titles).length}</b> 種</span>
+    <span class="card">全庫 <b>${Object.values(DB.stock).reduce((a,s)=>a+s.qty,0)}</b> 本</span>
+    <span class="card">偏低/缺書 <b>${Object.values(DB.stock).filter(s=>shelfStatus(s.qty)!=='ok').length}</b> 項</span></div>
+    <table><tr><th>書名</th><th>ISBN</th><th>分類</th><th>書架</th><th>庫存</th><th>狀態</th></tr>${rows}</table>`;
+  },
+  orders(){
+    let rows = DB.orders.map(o=>{
+      const t = DB.titles[o.title];
+      return `<tr><td>${o.id}</td><td>${t?DB.titles[o.title].title:o.title}</td><td>${o.qty}</td>
+      <td>${o.status==='pending'?'<span class="badge low">待出貨</span>':'<span class="badge ok">已出</span>'}</td></tr>`;
+    }).join("");
+    return `<h2 style="margin-bottom:12px">訂單</h2>
+    <table><tr><th>單號</th><th>書名</th><th>冊數</th><th>狀態</th></tr>${rows}</table>`;
+  },
+  titles(){
+    let rows = Object.entries(DB.titles).map(([id,t])=>{
+      const s = DB.stock[id];
+      return `<tr><td>${id}</td><td>${t.title}</td><td>${t.author}</td><td>${t.isbn}</td><td>$${t.price}</td><td>${t.cat}</td><td>${s.shelf}</td></tr>`;
+    }).join("");
+    return `<h2 style="margin-bottom:12px">書目資料</h2>
+    <table><tr><th>ID</th><th>書名</th><th>作者</th><th>ISBN</th><th>定價</th><th>分類</th><th>書架</th></tr>${rows}</table>`;
+  }
+};
+let cart = 0;
+function go(p){
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===p));
+  document.getElementById("app").innerHTML = pages[p]();
+  history.pushState({page:p},"", "#"+p);
+}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>go(b.dataset.page)));
+addEventListener("popstate",()=>{ const p = (location.hash||"#inventory").slice(1); if(pages[p]) go(p);});
+go(location.hash.slice(1) || "inventory");
+</script>
+</body>
+</html>
