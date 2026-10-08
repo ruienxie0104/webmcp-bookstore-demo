@@ -195,7 +195,7 @@ footer{padding:26px max(28px,calc((100vw - 1180px)/2)) 90px;border-top:1px solid
   </section>
 </div>
 
-<script src="./webmcp.js"></script>
+<script src="./webmcp.js?v=12"></script>
 <script>
 // ---------- 模擬資料域（window.DB；webmcp.js 讀這裡） ----------
 window.DB = {
@@ -264,6 +264,6 @@ document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()
 addEventListener("popstate",()=>{ const p = (location.hash||"#inventory").slice(1); if(pages[p]) go(p);});
 go(location.hash.slice(1) || "inventory");
 </script>
-<script src="./agent-console.js"></script>
+<script src="./agent-console.js?v=12"></script>
 </body>
 </html>
