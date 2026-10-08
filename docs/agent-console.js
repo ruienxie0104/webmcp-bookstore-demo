@@ -3,10 +3,15 @@
   "use strict";
 
   const examples = [
-    { tool: "get_inventory_status", args: {}, label: "get_inventory_status({})" },
-    { tool: "search_titles", args: { keyword: "夜行" }, label: "search_titles({keyword:\"夜行\"})" },
-    { tool: "search_titles", args: { keyword: " " }, label: "search_titles({keyword:\" \"}) · BAD_INPUT" },
-    { tool: "get_low_stock_report", args: {}, label: "get_low_stock_report({})" }
+    { tool: "get_low_stock_report", args: {}, label: "補貨報告 get_low_stock_report({})" },
+    { tool: "get_inventory_status", args: {}, label: "全量庫存 get_inventory_status({})" },
+    { tool: "get_inventory_status", args: { category: "技術" }, label: "技術類庫存 get_inventory_status({category:\"技術\"})" },
+    { tool: "get_inventory_status", args: { isbn: "9789573318301" }, label: "單一 ISBN 查詢 get_inventory_status({isbn:\"9789573318301\"})" },
+    { tool: "get_inventory_status", args: { isbn: "9780000000000" }, label: "不存在的 ISBN · NOT_FOUND 示範" },
+    { tool: "search_titles", args: { keyword: "夜行" }, label: "搜尋「夜行」search_titles({keyword:\"夜行\"})" },
+    { tool: "search_titles", args: { keyword: "島", category: "文學" }, label: "文學類搜「島」search_titles({keyword:\"島\",category:\"文學\"})" },
+    { tool: "search_titles", args: { keyword: "python" }, label: "英文關鍵字（大小寫不敏感）{keyword:\"python\"}" },
+    { tool: "search_titles", args: { keyword: " " }, label: "空關鍵字 · BAD_INPUT 示範" }
   ];
   const history = [];
   let selectedTool = null;
