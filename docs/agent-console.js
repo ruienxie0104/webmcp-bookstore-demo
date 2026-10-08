@@ -9,8 +9,8 @@
     { tool: "get_inventory_status", args: { isbn: "9789573318301" }, label: "單一 ISBN 查詢 get_inventory_status({isbn:\"9789573318301\"})" },
     { tool: "get_inventory_status", args: { isbn: "9780000000000" }, label: "不存在的 ISBN · NOT_FOUND 示範" },
     { tool: "search_titles", args: { keyword: "夜行" }, label: "搜尋「夜行」search_titles({keyword:\"夜行\"})" },
-    { tool: "search_titles", args: { keyword: "島", category: "文學" }, label: "文學類搜「島」search_titles({keyword:\"海風\",category:\"文學\"})" },
-    { tool: "search_titles", args: { keyword: "python" }, label: "英文關鍵字（大小寫不敏感）{keyword:\"演算法\"}" },
+    { tool: "search_titles", args: { keyword: "海風", category: "文學" }, label: "文學類搜「海風」search_titles({keyword:\"海風\",category:\"文學\"})" },
+    { tool: "search_titles", args: { keyword: "演算法" }, label: "搜尋「演算法」search_titles({keyword:\"演算法\"})" },
     { tool: "search_titles", args: { keyword: " " }, label: "空關鍵字 · BAD_INPUT 示範" }
   ];
   const history = [];
