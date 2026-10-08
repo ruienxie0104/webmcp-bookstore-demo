@@ -43,3 +43,14 @@
 - 只動 `site/index.html` 的 `<style>`、HTML 結構、視覺（可引入 webfont/CDN 套件）
 - **不得動**：`<script>` 內的 DB 資料域、路由邏輯、狀態計算（shelfStatus）、以及對 webmcp.js 的掛載點
 - `webmcp.js` 是後端域檔案：Gemini 不碰
+## v1.1 增補：Agent Console（模擬面板）
+
+背景：一般瀏覽器不支援原生 `document.modelContext`，訪客看不到 WebMCP 效果。
+規定：
+
+- `webmcp.js` 若偵測到原生 API → 照原契約註冊（真路徑）
+- 若偵測不到 → **不得偽造 `document.modelContext`**（避免誤導其他腳本），改暴露 `window.WEBMCP_DEMO = { supported: false, tools: [...] }`
+- 兩種情況都統一暴露 `window.WEBMCP_DEMO = { supported: boolean, tools: [{name, description, inputSchema, execute}] }`，作為頁面 UI 的單一介面
+- tool 的 execute 邏輯、schema、結構化錯誤**語義完全不變**（輸出欄位與 v1 契約一致）
+- 頁面 UI（Agent Console）呼叫 tools 一律走 `WEBMCP_DEMO.tools[].execute`，與原生註冊共用同一份定義
+- Console 必須標示偵測結果（原生支援/模擬模式），不得令訪客誤會模擬為真

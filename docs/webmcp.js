@@ -89,8 +89,8 @@
     return structErr("INTERNAL", `資料查詢失敗：${detail}`);
   }
 
-  function inventoryTool() {
-    return {
+  const tools = [
+    {
       name: "get_inventory_status",
       description: "查詢書店庫存狀態。可依 ISBN 或分類過濾；不帶參數回傳全量。",
       inputSchema: {
@@ -151,11 +151,8 @@
           return internalError(error);
         }
       }
-    };
-  }
-
-  function searchTool() {
-    return {
+    },
+    {
       name: "search_titles",
       description: "以關鍵字搜尋書名、作者或 ISBN（大小寫不敏感），可再按分類過濾。",
       inputSchema: {
@@ -207,11 +204,8 @@
           return internalError(error);
         }
       }
-    };
-  }
-
-  function lowStockTool() {
-    return {
+    },
+    {
       name: "get_low_stock_report",
       description: "產生偏低或缺書的庫存清單（庫存少於 5 本），供補貨判斷。",
       inputSchema: { type: "object", properties: {}, additionalProperties: false },
@@ -246,18 +240,29 @@
           return internalError(error);
         }
       }
-    };
-  }
+    }
+  ];
 
   function registerTools() {
     const modelContext = typeof document !== "undefined" ? document.modelContext : undefined;
-    const secureContext = typeof window === "undefined" || window.isSecureContext !== false;
-    if (!secureContext || !modelContext || typeof modelContext.registerTool !== "function") {
-      console.info("[webmcp] modelContext.registerTool not available in a secure context — adapter idle");
+    const supported = Boolean(modelContext && typeof modelContext.registerTool === "function");
+
+    if (typeof window !== "undefined") {
+      window.WEBMCP_DEMO = {
+        supported,
+        tools,
+        metadata: {
+          spec: "WebMCP Draft Community Group Report",
+          mode: "page-side registerTool"
+        }
+      };
+    }
+
+    if (!supported) {
+      console.info(`[webmcp] simulation mode: ${tools.map((tool) => tool.name).join(", ")}`);
       return;
     }
 
-    const tools = [inventoryTool(), searchTool(), lowStockTool()];
     try {
       tools.forEach((tool) => modelContext.registerTool(tool));
       console.info(`[webmcp] registered: ${tools.map((tool) => tool.name).join(", ")}`);

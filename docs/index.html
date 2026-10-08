@@ -73,6 +73,64 @@ td:first-child{font-weight:600;color:var(--ink);}
 footer{padding:26px max(28px,calc((100vw - 1180px)/2)) 90px;border-top:1px solid var(--line);color:#8b8b82;font-size:11px;letter-spacing:.04em;}
 #cart{position:fixed;right:24px;bottom:22px;z-index:12;background:var(--ink);color:#fff;padding:11px 18px;border:1px solid rgba(255,255,255,.14);border-radius:999px;box-shadow:0 12px 30px rgba(26,35,32,.25);font-size:13px;}
 #cart b{color:#e3c08a;}
+.console-launcher{
+  position:fixed;right:24px;bottom:74px;z-index:30;display:flex;align-items:center;gap:9px;
+  padding:12px 17px;border:1px solid rgba(255,255,255,.16);border-radius:999px;cursor:pointer;
+  background:var(--accent-deep);color:#fff;box-shadow:0 14px 34px rgba(16,76,68,.3);font-size:13px;font-weight:700;
+}
+.console-launcher:hover{background:var(--accent);transform:translateY(-1px);}
+.console-launcher:focus-visible,.console-close:focus-visible,.tool-button:focus-visible,.example-button:focus-visible,.console-run:focus-visible{
+  outline:3px solid rgba(197,138,58,.55);outline-offset:2px;
+}
+.console-launcher-mark{font:700 14px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#e3c08a;}
+.console-shell[hidden]{display:none;}
+.console-shell{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:24px;background:rgba(12,30,27,.64);backdrop-filter:blur(5px);}
+.console-panel{
+  width:min(1080px,100%);max-height:min(840px,calc(100vh - 48px));overflow:auto;border:1px solid #3c5d57;border-radius:20px;
+  background:#12231f;color:#e9f0ed;box-shadow:0 30px 90px rgba(5,17,14,.48);font-family:"Noto Sans TC",sans-serif;
+}
+.console-header{position:sticky;top:0;z-index:2;display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:24px 26px;border-bottom:1px solid #304b45;background:rgba(18,35,31,.96);backdrop-filter:blur(12px);}
+.console-kicker{margin-bottom:7px;color:#d9c092;font:700 11px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.15em;text-transform:uppercase;}
+.console-title-line{display:flex;flex-wrap:wrap;align-items:center;gap:12px;}
+.console-title-line h2{font:700 25px/1.3 "Noto Serif TC",serif;color:#fff;}
+.support-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 10px;border:1px solid;border-radius:999px;font-size:11px;font-weight:700;}
+.support-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor;}
+.support-badge.native{border-color:#3a846e;background:#173e34;color:#83d8ba;}
+.support-badge.simulated{border-color:#8b6733;background:#3a2c19;color:#efbd70;}
+.console-status-copy{margin-top:8px;color:#9db2aa;font-size:12px;line-height:1.6;}
+.console-close{flex:0 0 auto;width:38px;height:38px;border:1px solid #3c5d57;border-radius:10px;cursor:pointer;background:#1b332d;color:#c7d6d1;font-size:22px;line-height:1;}
+.console-body{display:grid;grid-template-columns:minmax(230px,.8fr) minmax(0,1.5fr);}
+.console-sidebar{padding:22px;border-right:1px solid #304b45;}
+.console-section-label{margin-bottom:11px;color:#819b92;font:700 10px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;}
+.console-tools{display:grid;gap:9px;}
+.tool-button{width:100%;padding:13px;border:1px solid #345149;border-radius:12px;cursor:pointer;background:#192e29;color:#dce8e4;text-align:left;transition:.18s;}
+.tool-button:hover,.tool-button.active{border-color:#b68a4d;background:#233d36;}
+.tool-name{display:block;color:#f3e2c4;font:700 12px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere;}
+.tool-description{display:block;margin-top:5px;color:#9eb1aa;font-size:11px;line-height:1.55;}
+.schema-summary{display:block;margin-top:7px;color:#6fae9d;font:500 10px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere;}
+.console-examples{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
+.example-button{max-width:100%;padding:7px 9px;border:1px solid #425c55;border-radius:8px;cursor:pointer;background:transparent;color:#b8cbc4;font:500 10px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;text-align:left;overflow-wrap:anywhere;}
+.example-button:hover{border-color:#b68a4d;color:#f0d6a9;}
+.console-history{display:grid;gap:7px;list-style:none;}
+.history-item{padding:9px 10px;border-left:2px solid #49675f;background:#192c27;color:#9fb3ac;font:500 10px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere;}
+.history-item strong{display:block;color:#d6e3de;font-weight:600;}
+.history-empty{color:#708b82;font-size:11px;line-height:1.6;}
+.console-workspace{min-width:0;padding:22px 24px 26px;}
+.console-workspace h3{color:#f3e2c4;font:700 15px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere;}
+.console-workspace-description{margin:7px 0 18px;color:#a7bbb4;font-size:12px;line-height:1.7;}
+.parameter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;}
+.parameter-field{display:grid;gap:6px;}
+.parameter-field label{color:#cad8d3;font:600 11px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;}
+.required-mark{margin-left:5px;color:#efbd70;font-family:"Noto Sans TC",sans-serif;}
+.parameter-field small{color:#718d84;font-size:10px;line-height:1.5;}
+.parameter-field input,.parameter-field select{width:100%;padding:10px 11px;border:1px solid #3b5a52;border-radius:9px;background:#0d1c18;color:#e6eeeb;font:500 12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;}
+.parameter-field input:focus,.parameter-field select:focus{outline:2px solid #b68a4d;border-color:transparent;}
+.no-parameters{padding:13px;border:1px dashed #3b5a52;border-radius:10px;color:#7f9990;font:500 11px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;}
+.console-run{margin-top:16px;padding:10px 20px;border:0;border-radius:9px;cursor:pointer;background:#c58a3a;color:#13231f;font-size:12px;font-weight:800;}
+.console-run:hover{background:#dda554;}
+.console-run:disabled{cursor:wait;opacity:.65;}
+.response-label{display:flex;align-items:center;justify-content:space-between;margin-top:23px;margin-bottom:8px;color:#819b92;font:700 10px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;}
+.response-output{min-height:190px;overflow:auto;padding:17px;border:1px solid #2d4941;border-radius:12px;background:#07130f;color:#a9dfc8;font:500 12px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;tab-size:2;}
 @media (max-width:700px){
   header{min-height:250px;padding:50px 22px 34px;}
   header small{position:static;order:-1;margin-bottom:28px;line-height:1.6;}
@@ -82,6 +140,12 @@ footer{padding:26px max(28px,calc((100vw - 1180px)/2)) 90px;border-top:1px solid
   main>div{display:grid;grid-template-columns:1fr 1fr;gap:10px;}.card{min-height:86px;padding:17px;}.card:last-child{grid-column:1/-1;}
   th,td{padding:13px 14px;}footer{padding-left:18px;padding-right:18px;line-height:1.8;}
   #cart{right:14px;bottom:14px;}
+  .console-launcher{right:14px;bottom:66px;}
+  .console-shell{padding:0;place-items:stretch;}
+  .console-panel{width:100%;max-height:100vh;border:0;border-radius:0;}
+  .console-header{padding:17px 16px;}.console-title-line h2{font-size:21px;}
+  .console-body{grid-template-columns:1fr;}.console-sidebar{padding:16px;border-right:0;border-bottom:1px solid #304b45;}
+  .console-tools{grid-template-columns:1fr;}.console-workspace{padding:18px 16px 22px;}.parameter-grid{grid-template-columns:1fr;}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;}}
 </style>
@@ -101,6 +165,35 @@ footer{padding:26px max(28px,calc((100vw - 1180px)/2)) 90px;border-top:1px solid
 <main id="app"></main>
 <footer>Bookstore Inventory Demo · vanilla JS SPA · 無後端（模擬資料）· WebMCP enabled</footer>
 <div id="cart">🛒 待出貨：<b id="cart-n">0</b></div>
+<button id="console-launcher" class="console-launcher" type="button" aria-haspopup="dialog" aria-controls="agent-console" aria-expanded="false">
+  <span class="console-launcher-mark">&gt;_</span> Agent Console
+</button>
+<div id="agent-console" class="console-shell" hidden>
+  <section class="console-panel" role="dialog" aria-modal="true" aria-labelledby="console-title">
+    <div class="console-header">
+      <div>
+        <div class="console-kicker">WebMCP inspector</div>
+        <div class="console-title-line">
+          <h2 id="console-title">Agent Console</h2>
+          <span id="support-badge" class="support-badge simulated">偵測中</span>
+        </div>
+        <p id="console-status-copy" class="console-status-copy">正在讀取頁面工具介面…</p>
+      </div>
+      <button id="console-close" class="console-close" type="button" aria-label="關閉 Agent Console">×</button>
+    </div>
+    <div class="console-body">
+      <aside class="console-sidebar">
+        <div class="console-section-label">Available tools</div>
+        <div id="console-tools" class="console-tools"></div>
+        <div class="console-section-label" style="margin-top:22px">Examples</div>
+        <div id="console-examples" class="console-examples"></div>
+        <div class="console-section-label" style="margin-top:22px">Recent calls · 5 max</div>
+        <ol id="console-history" class="console-history"></ol>
+      </aside>
+      <section id="console-workspace" class="console-workspace"></section>
+    </div>
+  </section>
+</div>
 
 <script src="./webmcp.js"></script>
 <script>
@@ -171,5 +264,6 @@ document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()
 addEventListener("popstate",()=>{ const p = (location.hash||"#inventory").slice(1); if(pages[p]) go(p);});
 go(location.hash.slice(1) || "inventory");
 </script>
+<script src="./agent-console.js"></script>
 </body>
 </html>
